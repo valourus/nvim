@@ -4,6 +4,7 @@ return {
         projects = {
             -- Define your project roots here. Glob patterns are supported.
             "~/code/*",
+            "~/code/hydra/*",
             "~/.config/nvim",  -- Useful for managing your dotfiles/Neovim config as a project
         },
         picker = {
