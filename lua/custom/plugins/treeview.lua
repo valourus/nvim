@@ -8,7 +8,7 @@ return {
     },
     keys = {
         { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
-        { "<leader>E", "<cmd>Neotree reveal<cr>", desc = "Reveal current file in Neo-tree" },
+        { "<A-1>", "<cmd>Neotree reveal<cr>", desc = "Reveal current file in Neo-tree" },
     },
     opts = {
         toggle = false,
