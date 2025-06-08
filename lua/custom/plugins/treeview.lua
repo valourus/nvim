@@ -22,7 +22,7 @@ function _G.openNeotreeAndPackageJsonConditionalSplit()
           local current_window_width = vim.api.nvim_win_get_width(0)
           local desired_width = math.floor(current_window_width * 0.80)
 
-          vim.cmd(desired_width .. "vsplit enew")
+          vim.cmd(desired_width .. "vsplit package.json")
         end
       end, 200) -- 200 milliseconds delay
     end
@@ -35,18 +35,18 @@ return {
     branch = "v3.x",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "nvim-tree/nvim-web-devicons",
         "MunifTanjim/nui.nvim",
     },
     keys = {
         { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
-        { "<A-1>",     "<cmd>Neotree reveal<cr>", desc = "Reveal current file in Neo-tree" },
+        { "<A-1>",     "<cmd>Neotree reveal reveal_force_cwd<cr>", desc = "Reveal current file in Neo-tree" },
     },
     opts = {
         toggle = false,
         reveal_force_cwd = true,
         reveal = true,
         filesystem = {
+	    close_on_select = false,
             follow_current_file = {
                 enabled = true,
                 leave_dirs_open = false,
@@ -55,7 +55,9 @@ return {
             use_libuv_file_watcher = true,
         },
         window = {
+            position = "left",
             width = 30,
+            permanent = true, -- Keep neo-tree open when switching tabs
             mappings = {
                 ["<space>"] = "none",
                 ["o"] = "open",
@@ -90,9 +92,11 @@ return {
         vim.api.nvim_create_autocmd({ "DirChanged" }, {
             group = "NeoTreeProjectAutoOpen",
             callback = function()
-              vim.cmd("Neotree reveal reveal_force_cwd")
               _G.openNeotreeAndPackageJsonConditionalSplit();
             end,
         })
+
+	-- Remove the TabNewEntered autocmd to prevent neo-tree from opening in every tab
+	-- This will make neo-tree independent of tabs
     end,
 }
