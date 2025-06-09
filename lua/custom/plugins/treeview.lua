@@ -1,7 +1,7 @@
 _G.last_neotree_package_json_execution_time = 0
 
 function _G.openNeotreeAndPackageJsonConditionalSplit()
-  if vim.fn.isdirectory(vim.fn.getcwd() .. "/.git") then
+  if vim.fn.isdirectory(vim.fn.getcwd() .. '/.git') then
     local current_time = vim.fn.reltime()[1]
 
     -- Step 1: Check if more than 1 second has passed since the last execution (debounce)
@@ -12,7 +12,7 @@ function _G.openNeotreeAndPackageJsonConditionalSplit()
       -- Step 3: Schedule the actual commands to run after a 200ms delay
       vim.defer_fn(function()
         -- Always reveal Neotree
-        vim.cmd("Neotree reveal reveal_force_cwd")
+        vim.cmd 'Neotree reveal reveal_force_cwd'
 
         -- Get the number of currently open windows
         local num_open_windows = #vim.api.nvim_list_wins()
@@ -22,81 +22,76 @@ function _G.openNeotreeAndPackageJsonConditionalSplit()
           local current_window_width = vim.api.nvim_win_get_width(0)
           local desired_width = math.floor(current_window_width * 0.80)
 
-          vim.cmd(desired_width .. "vsplit package.json")
+          vim.cmd(desired_width .. 'vsplit package.json')
         end
       end, 200) -- 200 milliseconds delay
     end
   end
 end
 
-
 return {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-        "MunifTanjim/nui.nvim",
+  'nvim-neo-tree/neo-tree.nvim',
+  branch = 'v3.x',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    'MunifTanjim/nui.nvim',
+  },
+  keys = {
+    { '<leader>e', '<cmd>Neotree toggle<cr>', desc = 'Toggle Neo-tree' },
+    { '<A-1>', '<cmd>Neotree reveal reveal_force_cwd<cr>', desc = 'Reveal current file in Neo-tree' },
+  },
+  opts = {
+    toggle = false,
+    reveal_force_cwd = true,
+    reveal = true,
+    filesystem = {
+      close_on_select = false,
+      follow_current_file = {
+        enabled = true,
+        leave_dirs_open = false,
+      },
+      hijack_netrw_behavior = 'open_current',
+      use_libuv_file_watcher = true,
     },
-    keys = {
-        { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
-        { "<A-1>",     "<cmd>Neotree reveal reveal_force_cwd<cr>", desc = "Reveal current file in Neo-tree" },
+    window = {
+      position = 'left',
+      width = 30,
+      permanent = true, -- Keep neo-tree open when switching tabs
+      mappings = {
+        ['<space>'] = 'none',
+        ['o'] = 'open',
+        ['<cr>'] = 'open',
+        ['S'] = 'open_split',
+        ['s'] = 'open_vsplit',
+        ['t'] = 'open_tabnew',
+        ['C'] = 'close_node',
+        ['z'] = 'close_all_nodes',
+        ['Z'] = 'expand_all_nodes',
+        ['a'] = 'add',
+        ['A'] = 'add_directory',
+        ['d'] = 'delete',
+        ['r'] = 'rename',
+        ['y'] = 'copy_to_clipboard',
+        ['x'] = 'cut_to_clipboard',
+        ['p'] = 'paste_from_clipboard',
+        ['c'] = 'copy',
+        ['m'] = 'move',
+        ['q'] = 'close_window',
+        ['R'] = 'refresh',
+        ['?'] = 'show_help',
+      },
     },
-    opts = {
-        toggle = false,
-        reveal_force_cwd = true,
-        reveal = true,
-        filesystem = {
-	    close_on_select = false,
-            follow_current_file = {
-                enabled = true,
-                leave_dirs_open = false,
-            },
-            hijack_netrw_behavior = "open_current",
-            use_libuv_file_watcher = true,
-        },
-        window = {
-            position = "left",
-            width = 30,
-            permanent = true, -- Keep neo-tree open when switching tabs
-            mappings = {
-                ["<space>"] = "none",
-                ["o"] = "open",
-                ["<cr>"] = "open",
-                ["S"] = "open_split",
-                ["s"] = "open_vsplit",
-                ["t"] = "open_tabnew",
-                ["C"] = "close_node",
-                ["z"] = "close_all_nodes",
-                ["Z"] = "expand_all_nodes",
-                ["a"] = "add",
-                ["A"] = "add_directory",
-                ["d"] = "delete",
-                ["r"] = "rename",
-                ["y"] = "copy_to_clipboard",
-                ["x"] = "cut_to_clipboard",
-                ["p"] = "paste_from_clipboard",
-                ["c"] = "copy",
-                ["m"] = "move",
-                ["q"] = "close_window",
-                ["R"] = "refresh",
-                ["?"] = "show_help",
-            },
-        },
-    },
+  },
 
-    config = function(_, opts)
-        require("neo-tree").setup(opts)
+  config = function(_, opts)
+    require('neo-tree').setup(opts)
+    vim.api.nvim_create_augroup('NeoTreeProjectAutoOpen', { clear = true })
 
-        vim.api.nvim_create_augroup("NeoTreeProjectAutoOpen", { clear = true })
-
-        vim.api.nvim_create_autocmd({ "DirChanged" }, {
-            group = "NeoTreeProjectAutoOpen",
-            callback = function()
-              _G.openNeotreeAndPackageJsonConditionalSplit();
-            end,
-        })
-
-	-- Remove the TabNewEntered autocmd to prevent neo-tree from opening in every tab
-	-- This will make neo-tree independent of tabs
-    end,
+    vim.api.nvim_create_autocmd({ 'DirChanged' }, {
+      group = 'NeoTreeProjectAutoOpen',
+      callback = function()
+        _G.openNeotreeAndPackageJsonConditionalSplit()
+      end,
+    })
+  end,
 }
