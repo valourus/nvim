@@ -15,8 +15,8 @@ return {
                 mode = "buffers",
                 offsets = {
                     {
-                        filetype = "Project files",
-                        text = "Neo-tree",
+                        filetype = "neo-tree",
+                        text = "Project Files",
                         highlight = "Directory",
                         text_align = "left",
                     },
