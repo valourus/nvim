@@ -85,13 +85,13 @@ return {
 
   config = function(_, opts)
     require('neo-tree').setup(opts)
-    vim.api.nvim_create_augroup('NeoTreeProjectAutoOpen', { clear = true })
+ --   vim.api.nvim_create_augroup('NeoTreeProjectAutoOpen', { clear = true })
 
-    vim.api.nvim_create_autocmd({ 'DirChanged' }, {
-      group = 'NeoTreeProjectAutoOpen',
-      callback = function()
-        _G.openNeotreeAndPackageJsonConditionalSplit()
-      end,
-    })
+  --  vim.api.nvim_create_autocmd({ 'DirChanged' }, {
+  --    group = 'NeoTreeProjectAutoOpen',
+  --    callback = function()
+  --      _G.openNeotreeAndPackageJsonConditionalSplit()
+  --    end,
+  --  })
   end,
 }
