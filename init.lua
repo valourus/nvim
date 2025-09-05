@@ -406,6 +406,7 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local actions = require("telescope.actions")
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -421,9 +422,12 @@ require('lazy').setup({
             '--smart-case',
             '--trim', -- Good for clean parsing
           },
-          --   mappings = {
-          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-          --   },
+          mappings = {
+            i = {
+              -- This remaps the <esc> key in insert mode to close the Telescope window
+              ['<esc>'] = actions.close,
+            },
+          },
         },
         -- pickers = {}
         extensions = {

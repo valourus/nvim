@@ -16,7 +16,7 @@ return {
       autosave_ignore_filetypes = {
         'gitcommit',
         'gitrebase',
-      },
+     },
     },
   },
   dependencies = {
