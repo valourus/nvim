@@ -8,7 +8,11 @@ vim.opt.smartindent = true
 vim.opt.cursorline = true
 vim.opt.clipboard = "unnamedplus"
 
--- Remove the help buffer opening with <F1>
+vim.keymap.set("i", "<C-v>", function()
+  return vim.fn.getreg("+")
+end, { expr = true, noremap = true })
+vim.keymap.set("n", "<C-v>", '"+p')
+
 vim.keymap.set({'n', 'i', 'c', 's', 'o', 'x'}, '<F1>', '<Nop>', { noremap = true, silent = true });
 
 return {
