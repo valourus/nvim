@@ -181,29 +181,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-local function close_terminal_buffer()
-  -- Check if the current buffer is a terminal buffer
-  if vim.bo.buftype == 'terminal' then
-    -- If we are in Terminal-Insert mode ('t'), first exit to Terminal-Normal mode
-    local mode = vim.api.nvim_get_mode().mode
-    if mode == 't' then
-      -- This sequence ensures we exit Terminal-Insert mode
-      vim.cmd 'stopinsert'
-    end
-    -- Now that we are in Normal mode, execute the close command
-    -- :q<CR> quits the window, effectively closing the terminal
-    vim.cmd 'q'
-  end
-end
-
--- Apply the mapping to Terminal-Insert ('t'), Normal ('n'), and Visual ('v') modes.
--- This ensures `<C-\>` always triggers the closure logic.
-vim.keymap.set({ 't', 'n', 'v' }, '<C-\\>', close_terminal_buffer, {
-  silent = true,
-  desc = 'Force close current terminal window',
-})
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
